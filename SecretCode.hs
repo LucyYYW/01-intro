@@ -4,7 +4,7 @@ import Data.Char
 import Data.Maybe
 import Test.HUnit
 
-code :: [(Char,Char)]
+code :: [(Char, Char)]
 code = zip ['a' .. 'z'] cypher ++ zip ['A' .. 'Z'] (map toUpper cypher)
   where
     cypher :: String
@@ -13,8 +13,12 @@ code = zip ['a' .. 'z'] cypher ++ zip ['A' .. 'Z'] (map toUpper cypher)
 encodeChar :: Char -> Char
 encodeChar c = undefined
 
-testEncodeChar = runTestTT $ TestList [ encodeChar 'a' ~?= 't',
-                                        encodeChar '.' ~?= '.']
+testEncodeChar =
+  runTestTT $
+    TestList
+      [ encodeChar 'a' ~?= 't',
+        encodeChar '.' ~?= '.'
+      ]
 
 encodeLine :: String -> String
 encodeLine = undefined
@@ -24,8 +28,9 @@ testEncodeLine = runTestTT $ TestList [encodeLine "abc defgh" ~?= "the quick"]
 encodeContent :: String -> String
 encodeContent = undefined
 
-testEncodeContent = runTestTT $
-  encodeContent "abc\n defgh\n" ~?= " quick\nthe\n"
+testEncodeContent =
+  runTestTT $
+    encodeContent "abc\n defgh\n" ~?= " quick\nthe\n"
 
 encodeFile :: FilePath -> IO ()
 encodeFile f = do
@@ -33,8 +38,8 @@ encodeFile f = do
   undefined
 
 main :: IO ()
-main = do putStrLn "What file shall I encode?"
-          fn <- getLine
-          encodeFile fn
-          putStrLn "All done!"
-
+main = do
+  putStrLn "What file shall I encode?"
+  fn <- getLine
+  encodeFile fn
+  putStrLn "All done!"
