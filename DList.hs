@@ -11,19 +11,28 @@ dlist :: DList Int
 dlist = \x -> 1 : 2 : 3 : x -- end is "x"
 
 empty :: DList a
-empty = undefined
+empty = id
+
+-- not good but works: empty = \x -> x
 
 singleton :: a -> DList a
-singleton x = undefined
+singleton x = (x :)
+
+-- not good but works: singleton x = \y -> x : y
+-- singleton x = (:)
 
 append :: DList a -> DList a -> DList a
-append = undefined
+-- not good but works: append dl1 dl2 = \x -> dl1 (dl2 x)
+append = (.)
 
 cons :: a -> DList a -> DList a
-cons = undefined
+-- not good but works: cons x dl = append (singleton x) dl
+cons = append . singleton
 
 fromList :: [a] -> DList a
-fromList = undefined
+fromList [] = empty
+-- not good but works: fromList (h : t) = cons h (fromList t)
+fromList xs = (xs ++)
 
 toList :: DList a -> [a]
 toList x = x []
@@ -33,7 +42,10 @@ testDList = do
   _ <-
     runTestTT $
       TestList
-        [ toList empty ~?= ([] :: [Char])
+        [ toList empty ~?= ([] :: [Char]),
+          toList (singleton 1) ~?= ([1] :: [Int]),
+          toList (append (singleton 1) empty) ~?= ([1] :: [Int]),
+          toList (append (singleton 1) (singleton 2)) ~?= ([1, 2] :: [Int])
         ]
   return ()
 

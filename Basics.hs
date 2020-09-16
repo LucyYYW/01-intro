@@ -169,7 +169,8 @@ jn (Just Nothing) = Nothing
 jn Nothing = Nothing
 
 jn' :: Maybe (Maybe a) -> Maybe a
-jn' = undefined
+jn' (Just x) = x
+jn' Nothing = Nothing
 
 location :: String -> Maybe String
 location "cis501" = Just "Wu & Chen"
@@ -182,13 +183,13 @@ l1 :: [Double]
 l1 = [1.0, 2.0, 3.0, 4.0]
 
 l2 :: [Int]
-l2 = undefined -- make a list of numbers
+l2 = [1, 2, 3, 4] -- make a list of numbers
 
 l3 :: [(Int, Bool)]
 l3 = [(1, True), (2, False)]
 
 l4 :: [[Int]]
-l4 = undefined -- make a list of lists
+l4 = [[1, 2], [3, 4]] -- make a list of lists
 
 -- l5 :: [Int]
 -- l5 = [ 1 , True ]  -- doesn't type check
@@ -266,7 +267,7 @@ isSingleton [_] = True
 isSingleton _ = False
 
 isLong :: [a] -> Bool
-isLong (x : y : z : _) = True
+isLong (_ : _ : _ : _) = True
 isLong _ = False
 
 testIsLong :: Test

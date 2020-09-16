@@ -11,7 +11,10 @@ code = zip ['a' .. 'z'] cypher ++ zip ['A' .. 'Z'] (map toUpper cypher)
     cypher = "thequickbrownfxjmpsvlazydg"
 
 encodeChar :: Char -> Char
-encodeChar c = undefined
+encodeChar c = encodeHelper (lookup c code) c
+  where
+    encodeHelper (Just x) _ = x
+    encodeHelper _ c = c
 
 testEncodeChar =
   runTestTT $
@@ -21,12 +24,16 @@ testEncodeChar =
       ]
 
 encodeLine :: String -> String
-encodeLine = undefined
+encodeLine [] = []
+encodeLine (h : xs) = (encodeChar h) : (encodeLine xs)
 
 testEncodeLine = runTestTT $ TestList [encodeLine "abc defgh" ~?= "the quick"]
 
 encodeContent :: String -> String
-encodeContent = undefined
+encodeContent str = (unlines . reverse . encodeLines . lines) str
+  where
+    encodeLines [] = []
+    encodeLines (l1 : rest) = (encodeLine l1) : (encodeLines rest)
 
 testEncodeContent =
   runTestTT $
@@ -35,11 +42,13 @@ testEncodeContent =
 encodeFile :: FilePath -> IO ()
 encodeFile f = do
   let outFile = f ++ ".code"
-  undefined
+  str <- readFile f
+  writeFile outFile (encodeContent str)
 
 main :: IO ()
 main = do
   putStrLn "What file shall I encode?"
   fn <- getLine
   encodeFile fn
+
   putStrLn "All done!"

@@ -14,7 +14,7 @@ funp :: (Int -> Int, Int -> Int)
 funp = (plus1, minus1)
 
 funs :: [Int -> Int]
-funs = undefined
+funs = [plus1, minus1]
 
 doTwice :: (a -> a) -> a -> a
 doTwice f x = f (f x)
@@ -58,6 +58,9 @@ oneStringArg = twoArg 3
 oneIntArg :: Int -> Bool
 oneIntArg = flip twoArg "a"
 
+oneIntArg' :: Int -> Bool
+oneIntArg' = \x -> twoArg x "a"
+
 anonTests :: Test
 anonTests =
   TestList
@@ -75,7 +78,7 @@ anotherFour :: Int
 anotherFour = doTwice (+ 2) 0
 
 singleton :: a -> [a]
-singleton = undefined
+singleton = (: [])
 
 singletonTest :: Test
 singletonTest = singleton True ~?= [True]
@@ -87,7 +90,11 @@ ex1 :: (a -> a) -> a -> a
 ex1 x y = doTwice doTwice x y
 
 ex1Test :: Test
-ex1Test = undefined
+ex1Test =
+  TestList
+    [ ex1 plus1 5 ~?= 9,
+      ex1 (1 :) [] ~?= [1, 1, 1, 1]
+    ]
 
 len :: [a] -> Int
 len [] = 0
@@ -128,7 +135,7 @@ toUpperString' :: String -> String
 toUpperString' xs = map toUpper xs
 
 shiftPoly' :: XY -> Polygon -> Polygon
-shiftPoly' d = undefined
+shiftPoly' d = map (shiftXY d)
 
 testMap :: Test
 testMap =
@@ -143,7 +150,7 @@ listIncr [] = []
 listIncr (x : xs) = (x + 1) : listIncr xs
 
 listIncr' :: [Int] -> [Int]
-listIncr' = undefined
+listIncr' = map (+ 1)
 
 sum :: [Int] -> Int
 sum [] = 0
@@ -169,14 +176,14 @@ testFoldr =
     ]
 
 len' :: [a] -> Int
-len' = undefined
+len' = foldr (\x y -> 1 + y) 0
 
 factorial :: Int -> Int
 factorial 0 = 1
 factorial n = n * factorial (n -1)
 
 factorial' :: Int -> Int
-factorial' n = undefined
+factorial' n = foldr (*) 1 [1 .. n]
 
 filter :: (a -> Bool) -> [a] -> [a]
 testFilter :: Test
@@ -185,7 +192,9 @@ testFilter =
     [ filter (> 10) [1 .. 20] ~?= ([11 .. 20] :: [Int]),
       filter (\l -> sum l <= 42) [[10, 20], [50, 50], [1 .. 5]] ~?= [[10, 20], [1 .. 5]]
     ]
-filter pred = undefined
+filter pred = foldr (\x y -> if pred x then x : y else y) []
 
 runTests :: IO Counts
 runTests = runTestTT $ TestList [testMap, testFoldr, testFilter]
+
+h x = [x True, x False]

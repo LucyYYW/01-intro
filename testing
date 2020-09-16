@@ -1,0 +1,22 @@
+Remember that you can execute the definitions in this module by loading it into ghci. In the terminal, you can use the command
+
+  stack ghci SecretCode.hs
+to automatically start ghci and load the module.
+
+OK, we're going to write a Haskell program to encode and decode text files using a secret code.
+
+We'll call it the Brown Fox code. Here's how it works:
+
+- Replace each letter according to the following correspondence:
+
+        "abcdefghijklmnopqrstuvwxyz"
+    to  "thequickbrownfxjmpsvlazydg"
+
+  But leave any non-letter characters alone.
+
+- Then reverse the order of the lines in the file.
+> import Data.Char
+> import Data.Maybe
+> import Test.HUnit
+First, we make a lookup list (aka association list) containing each pair of corresponding letters:
+
