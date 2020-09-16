@@ -52,12 +52,14 @@ testDList = do
 micro1 :: Char
 micro1 = last (t 10000 "")
   where
+    t :: Int -> [Char] -> [Char]
     t 0 l = l
     t n l = t (n -1) (l ++ "s")
 
 micro2 :: Char
 micro2 = last (toList (t 10000 empty))
   where
+    t :: Int -> DList Char -> DList Char
     t 0 l = l
     t n l = t (n -1) (l `append` singleton 's')
 

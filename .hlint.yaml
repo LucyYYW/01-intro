@@ -20,6 +20,5 @@
 - ignore: {name: "Reduce duplication"}
 - ignore: {name: "Redundant return"}
 - ignore: {name: "Redundant lambda"}
-- ignore: {name: "Avoid lambda"}
 - ignore: {name: "Avoid lambda using `infix`"}
 - ignore: {name: "Eta reduce"}
